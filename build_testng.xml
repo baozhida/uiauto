@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="uiauto" default="testng" basedir=".">
+    <!-- =================================================================== -->
+    <!-- 变量设置-->
+    <!-- =================================================================== -->
+    
+    <!-- 编译文件class路径 -->
+    <property name="bulid.path" value="./build"/>
+    <!-- 单元测试代码路径 -->
+    <property name="test.path" value="./src"/>
+	<!-- lib路径 -->
+	<property name="lib.path" value="./lib"/>
+    <!-- lib包路径 根据实际情况修改 
+    <property name="maven.path" value="D:\maven\repository"/> -->
+    <!--生成报告路径 -->
+    <property name="report.path" value="./report"/>
+		
+	<taskdef name="testng" classname="org.testng.TestNGAntTask">
+	    <classpath>
+	      <pathelement location="lib/testng-6.10.jar"/>
+	    </classpath>
+	  </taskdef>
+    
+    <!-- =================================================================== -->
+    <!-- 设置classpath 不仅包含引用包，也包含编译的文件包-->
+    <!-- =================================================================== -->
+    <path id="compile.path">
+        <fileset dir="${lib.path}">
+            <include name="**/*.jar"/>
+        </fileset>
+    	<!-- class文件的路径 -->
+    	<pathelement path="${bulid.path}"/>
+    </path>
+    
+    <target name="init">
+    	<delete dir="${bulid.path}"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- 编译测试文件，初始化目录 -->
+    <!-- =================================================================== -->
+    <target name="compile" depends="init">
+    	<mkdir dir="build"/>
+        <javac srcdir="${test.path}" destdir="${bulid.path}"  classpathref="compile.path" includeantruntime="on" encoding="UTF-8"/>
+    </target>
+    
+    <!-- =================================================================== -->
+    <!-- 执行测试案例 -->
+    <!-- =================================================================== -->
+	 <target name="testng" depends="compile">
+	    <testng  classpathref="compile.path"  outputDir="report" 
+			useDefaultListeners="false"   
+	        listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter" >
+	        <xmlfileset dir="${basedir}" includes="testng.xml"/>
+	        <jvmarg value="-Dfile.encoding=UTF-8" />
+	        <sysproperty key="org.uncommons.reportng.title" value="UIAutoTestReport" /> 
+        </testng>
+	</target>		
+		
+	<!--<target name="runall" depends="runtestng" description="deal the lable">
+        <exec executable="./bin/exec_replace.sh">
+        </exec>
+    </target>-->
+	
+</project>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="build" path="src">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/fastjson-1.2.31.jar"/>
+	<classpathentry kind="lib" path="lib/accessors-smart-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/asm-5.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/jcommander-1.48.jar"/>
+	<classpathentry kind="lib" path="lib/json-path-2.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/json-smart-2.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/macacaclient-2.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/reportng-1.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-server-standalone-3.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.16.jar"/>
+	<classpathentry kind="lib" path="lib/testng-6.10.jar"/>
+	<classpathentry kind="lib" path="lib/velocity-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/velocity-dep-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/guice-3.0.jar"/>
+	<classpathentry kind="output" path="build"/>
+</classpath>
