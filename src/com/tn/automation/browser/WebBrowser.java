@@ -266,7 +266,7 @@ public abstract class WebBrowser {
 	 *            Frame元素
 	 * @throws Exception
 	 */
-	public void switchFrame(ElementLocator locator) throws Exception {
+	public void switchFrame(String locator) throws Exception {
 		WebElement element = findElement(locator);
 		driver.switchTo().frame(element);
 	}
@@ -286,14 +286,15 @@ public abstract class WebBrowser {
 	 * @return 控件对象
 	 * @throws Exception
 	 */
-	public WebElement findElement(final ElementLocator locator) {
+	public WebElement findElement(String locator) {
+		final ElementLocator el = ElementLocator.create(locator);
 		Wait<WebDriver> wait = new FluentWait<WebDriver>(this.driver).withTimeout(MAX_WAIT_TIME, MILLISECONDS)
 				.pollingEvery(INTERVAL, MILLISECONDS).ignoring(RuntimeException.class);
 
 		try {
 			WebElement element = wait.until(new Function<WebDriver, WebElement>() {
 				public WebElement apply(WebDriver driver) {
-					return locator.locate(driver);
+					return el.locate(driver);
 				}
 			});
 
@@ -303,14 +304,15 @@ public abstract class WebBrowser {
 		}
 	}
 
-	public WebElement findElement(final ElementLocator locator, int timeout) {
+	public WebElement findElement(String locator, int timeout) {
+		final ElementLocator el = ElementLocator.create(locator);
 		Wait<WebDriver> wait = new FluentWait<WebDriver>(this.driver).withTimeout(timeout, MILLISECONDS)
 				.pollingEvery(800, MILLISECONDS).ignoring(RuntimeException.class);
 
 		try {
 			WebElement element = wait.until(new Function<WebDriver, WebElement>() {
 				public WebElement apply(WebDriver driver) {
-					return locator.locate(driver);
+					return el.locate(driver);
 				}
 			});
 
@@ -327,17 +329,32 @@ public abstract class WebBrowser {
 	 *            待查找控件定位符
 	 * @return 控件对象
 	 */
-	public List<WebElement> findElements(ElementLocator locator) {
-		return findElements(locator, MAX_WAIT_TIME);
+	public List<WebElement> findElements(String locator) {
+		final ElementLocator el = ElementLocator.create(locator);
+		Wait<WebDriver> wait = new FluentWait<WebDriver>(this.driver).withTimeout(MAX_WAIT_TIME, MILLISECONDS)
+				.pollingEvery(INTERVAL, MILLISECONDS).ignoring(RuntimeException.class);
+
+		List<WebElement> elements = wait.until(new Function<WebDriver, List<WebElement>>() {
+			public List<WebElement> apply(WebDriver driver) {
+				return el.findElements(driver);
+			}
+		});
+
+		List<WebElement> list = new ArrayList<WebElement>();
+		for (WebElement element : elements) {
+			list.add(element);
+		}
+		return list;
 	}
 
-	public List<WebElement> findElements(final ElementLocator locator, long maxWaitTime) {
+	public List<WebElement> findElements(String locator, long maxWaitTime) {
+		final ElementLocator el = ElementLocator.create(locator);
 		Wait<WebDriver> wait = new FluentWait<WebDriver>(this.driver).withTimeout(maxWaitTime, MILLISECONDS)
 				.pollingEvery(INTERVAL, MILLISECONDS).ignoring(RuntimeException.class);
 
 		List<WebElement> elements = wait.until(new Function<WebDriver, List<WebElement>>() {
 			public List<WebElement> apply(WebDriver driver) {
-				return locator.findElements(driver);
+				return el.findElements(driver);
 			}
 		});
 
@@ -418,7 +435,7 @@ public abstract class WebBrowser {
 		int iHeight = 0;
 		int iBody = 1;
 		boolean istrue = true;
-		ElementLocator oLocator = ElementLocator.create("xpath:://body");
+		String oLocator = "xpath:://body";
 		WebElement element = findElement(oLocator);
 		iBody = element.getSize().getHeight();
 		System.out.println("页面高度是" + iBody);
@@ -516,7 +533,7 @@ public abstract class WebBrowser {
 	 * @param isVisible
 	 *            预期可见性
 	 */
-	public void verifyElementVisible(ElementLocator locator, boolean isVisible) {
+	public void verifyElementVisible(String locator, boolean isVisible) {
 		WebElement element = findElement(locator);
 
 		if (element.isDisplayed() != isVisible) {
@@ -532,7 +549,7 @@ public abstract class WebBrowser {
 	 * @param isEnabled
 	 *            预期可用性
 	 */
-	public void verifyElementEnabled(ElementLocator locator, boolean isEnabled) {
+	public void verifyElementEnabled(String locator, boolean isEnabled) {
 		WebElement element = findElement(locator);
 
 		if (element.isEnabled() != isEnabled) {
@@ -548,7 +565,7 @@ public abstract class WebBrowser {
 	 * @param isSelected
 	 *            预期选中状态
 	 */
-	public void verifyElementSelected(ElementLocator locator, boolean isSelected) {
+	public void verifyElementSelected(String locator, boolean isSelected) {
 		WebElement element = findElement(locator);
 
 		if (element.isSelected() != isSelected) {
@@ -564,7 +581,7 @@ public abstract class WebBrowser {
 	 * @param isExisted
 	 *            存在性
 	 */
-	public void verifyElementExisted(ElementLocator locator, boolean isExisted) {
+	public void verifyElementExisted(String locator, boolean isExisted) {
 		List<WebElement> elements = findElements(locator);
 
 		boolean result_act = true;
@@ -587,7 +604,7 @@ public abstract class WebBrowser {
 	 * @date 2016-4-15
 	 */
 	
-	public boolean isElementExisted(ElementLocator locator, boolean isExisted) {
+	public boolean isElementExisted(String locator, boolean isExisted) {
 		List<WebElement> elements = findElements(locator);
 		boolean flag = false;
 		if (elements.size() != 0) {
@@ -606,7 +623,7 @@ public abstract class WebBrowser {
 	 * @param mode
 	 *            匹配模式: ExactMatch=精确匹配 PartialMatch=部分匹配 RegexMatch=正则表达式匹配
 	 */
-	public void verifyElementText(ElementLocator locator, String text, MatchMode mode, boolean matched) {
+	public void verifyElementText(String locator, String text, MatchMode mode, boolean matched) {
 		WebElement element = findElement(locator);
 
 		boolean bIsMatched = false;
@@ -642,7 +659,7 @@ public abstract class WebBrowser {
 	 * @param mode
 	 *            匹配模式: ExactMatch=精确匹配 PartialMatch=部分匹配 RegexMatch=正则表达式匹配
 	 */
-	public void verifyElementAttribute(ElementLocator locator, String Attribute, String value, MatchMode mode,
+	public void verifyElementAttribute(String locator, String Attribute, String value, MatchMode mode,
 			boolean matched) {
 		WebElement element = findElement(locator);
 
@@ -742,7 +759,7 @@ public abstract class WebBrowser {
 	* @return void 返回类型
 	* 
 	 */
-	public void verifyComboBoxSelectOption(ElementLocator locator, String text, boolean matched) {
+	public void verifyComboBoxSelectOption(String locator, String text, boolean matched) {
 		WebElement comboSelect = findElement(locator);
 
 		ComboBox combo = new ComboBox(comboSelect);
@@ -768,7 +785,7 @@ public abstract class WebBrowser {
 	* @return void 返回类型
 	* 
 	 */
-	public void verifyComboBoxSelectOption(ElementLocator locator, String[] texts, boolean matched) {
+	public void verifyComboBoxSelectOption(String locator, String[] texts, boolean matched) {
 		WebElement comboSelect = findElement(locator);
 
 		ComboBox combo = new ComboBox(comboSelect);
@@ -794,7 +811,7 @@ public abstract class WebBrowser {
 	 * @date 2016-04-12
 	 */
 
-	public WebElement scrollFindElement(ElementLocator oLocator) {
+	public WebElement scrollFindElement(String oLocator) {
 		int i = 0;
 		int iHeight = 0;
 		WebElement ele = null;
@@ -828,7 +845,7 @@ public abstract class WebBrowser {
 	 * @date 2016-04-12
 	 */
 
-	public WebElement scrollFindElement(ElementLocator oLocator, int offset) {
+	public WebElement scrollFindElement(String oLocator, int offset) {
 		int i = 0;
 		int iHeight = 0;
 		WebElement ele = null;

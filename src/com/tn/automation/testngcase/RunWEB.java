@@ -7,10 +7,14 @@ import static com.tn.automation.browser.Browsers.getDriver;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.BeforeClass;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.AfterMethod;
@@ -18,6 +22,8 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import com.tn.automation.util.CaseResult;
+import com.tn.automation.util.CommonFunction;
 import com.tn.automation.util.Path;
 import com.alibaba.fastjson.JSONObject;
 
@@ -105,22 +111,39 @@ public class RunWEB {
     @BeforeClass
     public void setUp() throws Exception {
     	System.out.println("进入setUp方法");
+    	initDriver();
+    	getDriver().open("http://www.tuniu.com");
+    	Thread.sleep(5000);
     }
     
     @BeforeMethod
     public void beforeMethod() throws Exception {
     	System.out.println("进入beforecase方法");
-    	initDriver();
     }
 
     @Test
-    public void case_001xxx() throws InterruptedException {
-    	System.out.println("进入case_001xxx方法");
-    	getDriver().open("https://baidu.com");
-    	System.out.println(getDriver().getCurrentUrl());
-    	Thread.sleep(5000);
-    	getDriver().takeScreenshot(browsertype, BrowserVersion);
-    	System.out.println("end case_001xxx()方法");
+    public void case_001检查首页css和js引用正常连接() throws Exception {
+    	System.out.println("start case_001");
+    	//getDriver().scrollToBottom();
+    	//检查js引用
+    	CaseResult result = CommonFunction.checkJsURLConnect();
+    	Assert.assertTrue(result.getKey(),result.getMsg());
+    	//检查css引用
+    	result = CommonFunction.checkCssURLConnect();
+    	Assert.assertTrue(result.getKey(),result.getMsg());
+    	
+    	//getDriver().takeScreenshot(browsertype, BrowserVersion);
+    	System.out.println("end case_001()");
+    }
+    
+    
+    @Test//(enabled = false)
+    public void case_002检查首页图片能正常连接() throws Exception {
+    	System.out.println("start case_002()");
+    	//getDriver().scrollToBottom();
+    	CaseResult result =CommonFunction.checkPicConnect();
+    	Assert.assertTrue(result.getKey(),result.getMsg());
+    	System.out.println("end case_002()");
     }
     
     
