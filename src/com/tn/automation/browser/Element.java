@@ -1,7 +1,5 @@
 package com.tn.automation.browser;
 
-import static com.tn.automation.browser.Browsers.getDriver;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -26,10 +24,17 @@ import com.tn.automation.browser.WebBrowser;
 public class Element
 {
 	
+	private WebBrowser driver;
+
+	public Element(WebBrowser driver) {
+		super();
+		this.driver = driver;
+	}
+	
 	//获取元素的宽度
     public int getSizeX(String locatorexpression) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().findElement(locatorexpression);
+		WebElement element = driver.findElement(locatorexpression);
 	     
 		return element.getSize().getWidth();
 		
@@ -37,14 +42,14 @@ public class Element
     //获取元素的高度
     public int getSizeY(String locatorexpression) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-    	WebElement element = getDriver().findElement(locatorexpression);
+    	WebElement element = driver.findElement(locatorexpression);
     	return element.getSize().getHeight();
 		
 	}
     //获取元素的横坐标X
     public int getLocationX(String locatorexpression) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().findElement(locatorexpression);
+		WebElement element = driver.findElement(locatorexpression);
 	    return element.getLocation().getX();
 		
 	}
@@ -52,7 +57,7 @@ public class Element
   //获取元素的纵坐标Y
     public int getLocationY(String locatorexpression) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().findElement(locatorexpression);
+		WebElement element = driver.findElement(locatorexpression);
 	    return element.getLocation().getY();	
 	}
     
@@ -71,12 +76,12 @@ public class Element
     public void verifyelementExistedToClick(String locatorexpression1,String locatorexpression2,boolean match) {
     	//ElementLocator locator1 = ElementLocator.create(locatorexpression1);
     	//ElementLocator locator2 = ElementLocator.create(locatorexpression2);
-    	//WebElement element4click = getDriver().findElement(locator2);
-    	boolean flag = getDriver().isElementExisted(locatorexpression1, match);;
+    	//WebElement element4click = driver.findElement(locator2);
+    	boolean flag = driver.isElementExisted(locatorexpression1, match);;
     	//如果元素存在，点击元素，可以是当前元素，也可以是另一个元素
     	if(flag == match)
     	{	
-    		getDriver().findElement(locatorexpression2).click();
+    		driver.findElement(locatorexpression2).click();
     	}else{
     		System.out.println("元素 " + locatorexpression1 + "不存在，不做任何操作。");
     	}
@@ -95,7 +100,7 @@ public class Element
 	 */
 	public String getElementAttribute(String locatorexpression,String name) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().findElement(locatorexpression);
+		WebElement element = driver.findElement(locatorexpression);
 		return element.getAttribute(name);
 	}
 	
@@ -111,7 +116,7 @@ public class Element
 	 */
 	public String getElementAttributes(String locatorexpression,String name) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-    	List<WebElement> elements = getDriver().findElements(locatorexpression);
+    	List<WebElement> elements = driver.findElements(locatorexpression);
     	ArrayList<String> list = new ArrayList<String>();
     	for(int i=0;i<elements.size();i++) {
 			String s = elements.get(i).getAttribute(name);
@@ -131,13 +136,13 @@ public class Element
 	 */
 	public void setElementAttribute(String locatorexpression,String name,String value) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().findElement(locatorexpression);
+		WebElement element = driver.findElement(locatorexpression);
 		
 		if(!value.equalsIgnoreCase("empty")){
 		
-			getDriver().executeJScript("arguments[0].setAttribute(arguments[1], arguments[2]);", element , name , value);
+			driver.executeJScript("arguments[0].setAttribute(arguments[1], arguments[2]);", element , name , value);
 		}else{
-			getDriver().executeJScript("arguments[0].removeAttribute(arguments[1]);", element ,name);			
+			driver.executeJScript("arguments[0].removeAttribute(arguments[1]);", element ,name);			
 		}
 	}
 
@@ -151,7 +156,7 @@ public class Element
 	 */
 	public String getElementText(String locatorexpression) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().findElement(locatorexpression);
+		WebElement element = driver.findElement(locatorexpression);
 		return element.getText();
 	}
 
@@ -165,7 +170,7 @@ public class Element
 	 */
 	public String getTableElement(String locatorexpression, String xpath,int col_num,int row_num) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement tableElement = getDriver().findElement(locatorexpression);
+		WebElement tableElement = driver.findElement(locatorexpression);
 		Table table = new Table(tableElement);
 		WebElement element = table.findElementAtCell(xpath, col_num, row_num);
 		return element.getText();
@@ -179,7 +184,7 @@ public class Element
 	 */
 	public void elementClick(String locatorexpression) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().findElement(locatorexpression);
+		WebElement element = driver.findElement(locatorexpression);
 		
 		element.click();
 	}
@@ -193,12 +198,12 @@ public class Element
 	 */
 	public void elementClickAndSwitch(String locatorexpression) throws InterruptedException {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().findElement(locatorexpression);
-		Set<String> windowHandlesBefore = getDriver().getWindowHandles();
+		WebElement element = driver.findElement(locatorexpression);
+		Set<String> windowHandlesBefore = driver.getWindowHandles();
 		System.out.println("windowHandlesBefore是： " + windowHandlesBefore);
 		element.click();
 		Thread.sleep(2000);
-		getDriver().switchWindow(windowHandlesBefore);
+		driver.switchWindow(windowHandlesBefore);
 	}
 
 	/**
@@ -209,8 +214,8 @@ public class Element
 	 */
 	public void elementContextClick(String locatorexpression) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().findElement(locatorexpression);
-		Actions builder = getDriver().getActionBuilder();
+		WebElement element = driver.findElement(locatorexpression);
+		Actions builder = driver.getActionBuilder();
 		Action action = builder.contextClick(element).build();
 		action.perform();
 	}
@@ -223,8 +228,8 @@ public class Element
 	 */
 	public void elementDoubleClick(String locatorexpression) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().findElement(locatorexpression);
-		Actions builder = getDriver().getActionBuilder();
+		WebElement element = driver.findElement(locatorexpression);
+		Actions builder = driver.getActionBuilder();
 		Action action = builder.doubleClick(element).build();
 		action.perform();
 	}
@@ -237,8 +242,8 @@ public class Element
 	 */
 	public void elementMove(String locatorexpression) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().findElement(locatorexpression);
-		Actions builder = getDriver().getActionBuilder();
+		WebElement element = driver.findElement(locatorexpression);
+		Actions builder = driver.getActionBuilder();
 		Action action = builder.moveToElement(element).build();
 		action.perform();
     }
@@ -251,11 +256,11 @@ public class Element
 	 */
 	public void elementDrag(String source, String target) {
 		//ElementLocator locatorsource = ElementLocator.create(source);
-		WebElement elementfrom = getDriver().findElement(source);
+		WebElement elementfrom = driver.findElement(source);
 		//ElementLocator locatortarget = ElementLocator.create(target);
-		WebElement elemento = getDriver().findElement(target);
+		WebElement elemento = driver.findElement(target);
 
-		Actions builder = getDriver().getActionBuilder();
+		Actions builder = driver.getActionBuilder();
 		Action action = builder.dragAndDrop(elementfrom, elemento).build();
 		action.perform();
 	}
@@ -270,7 +275,7 @@ public class Element
 	 */
 	public void textClear(String locatorexpression) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().findElement(locatorexpression);
+		WebElement element = driver.findElement(locatorexpression);
 		element.clear();
 	}
 	
@@ -285,7 +290,7 @@ public class Element
 	 */
 	public void textInput(String locatorexpression, String text) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().findElement(locatorexpression);
+		WebElement element = driver.findElement(locatorexpression);
 		System.out.println("待输入的文本是 " + text);
 		if (text.length() != 0)
 		{
@@ -301,9 +306,9 @@ public class Element
 	 * @param text
 	 *            待输入的文字
 	 */
-	public static void textClearAndInput(String locatorexpression, String text) {	
+	public void textClearAndInput(String locatorexpression, String text) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().findElement(locatorexpression);
+		WebElement element = driver.findElement(locatorexpression);
 		System.out.println("待输入的文本是 " + text);
 		element.clear();
 		if (text.length() != 0)
@@ -320,10 +325,10 @@ public class Element
 	 * @param flag
 	 *            选择状态
 	 */
-	public static void checkBoxClick(String locatorexpression, boolean flag) {	
+	public void checkBoxClick(String locatorexpression, boolean flag) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
         
-		List<WebElement> elements = getDriver().findElements(locatorexpression);
+		List<WebElement> elements = driver.findElements(locatorexpression);
 		
 		if (elements.size() < 0) {
 			throw new RuntimeException("控件不存在！");
@@ -346,10 +351,10 @@ public class Element
 	 * @param num
 	 *            具体需要操作的复选框序号，1，2，3
 	 */
-	public static void checkBoxClick(String locatorexpression, int num, boolean flag) {	
+	public void checkBoxClick(String locatorexpression, int num, boolean flag) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
         
-		List<WebElement> elements = getDriver().findElements(locatorexpression);
+		List<WebElement> elements = driver.findElements(locatorexpression);
 		
 		if (elements.size() < 0) {
 			throw new RuntimeException("控件不存在！");
@@ -369,9 +374,9 @@ public class Element
 	 * @param isSelected
 	 *            选择状态
 	 */
-	public static void radioClick(String locatorexpression, boolean flag) {	
+	public void radioClick(String locatorexpression, boolean flag) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-    	WebElement element = getDriver().findElement(locatorexpression);
+    	WebElement element = driver.findElement(locatorexpression);
 
     	Select radioButton = new Select(element);
 
@@ -386,7 +391,7 @@ public class Element
 	 */
 	public void comboSelect(String locatorexpression, int index) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-    	WebElement element = getDriver().findElement(locatorexpression);
+    	WebElement element = driver.findElement(locatorexpression);
 
 		ComboBox combo = new ComboBox(element);
 
@@ -401,7 +406,7 @@ public class Element
 	 */
 	public void comboSelect(String locatorexpression, String value) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-    	WebElement element = getDriver().findElement(locatorexpression);
+    	WebElement element = driver.findElement(locatorexpression);
 
 		ComboBox combo = new ComboBox(element);
         combo.selectByVisibleText(value);
@@ -413,7 +418,7 @@ public class Element
 	 * @param key 键盘动作
 	 * 
 	 */
-//	public static void keyPress(Parameter poParam) {
+//	public void keyPress(Parameter poParam) {
 //		String sKey = poParam.getString("key");
 //		Integer iCount = poParam.getInt("count");
 //
@@ -429,7 +434,7 @@ public class Element
 	 * 
 	 * @param poParam
 	 */
-//	public static void uploadFile(Parameter poParam)
+//	public void uploadFile(Parameter poParam)
 //
 //	{
 //		ElementLocator oLocator = ElementLocator.create(poParam
@@ -465,7 +470,7 @@ public class Element
 	 * 比如属性type=flash
 	 * @param poParam
 	 */
-//	public static void uploadFileAu3(Parameter poParam)
+//	public void uploadFileAu3(Parameter poParam)
 //	{
 //		String sWinTitle = poParam.getString("winTitle");
 //		String sInputID = poParam.getString("inputID");
@@ -512,7 +517,7 @@ public class Element
 	 */
 	public int getElementExistedSize(String locatorexpression) {	
     	//ElementLocator locator = ElementLocator.create(locatorexpression);
-    	List<WebElement> elements = getDriver().findElements(locatorexpression);
+    	List<WebElement> elements = driver.findElements(locatorexpression);
 		return elements.size();		
 	}
 
@@ -525,7 +530,7 @@ public class Element
 	 */
 	public void findElementByScroll(String locatorexpression) {	
 		//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().scrollFindElement(locatorexpression);
+		WebElement element = driver.scrollFindElement(locatorexpression);
 		if(element == null){throw new RuntimeException("元素未找到!");}
 	}
 	
@@ -535,9 +540,9 @@ public class Element
 	 * @author baozhida
 	 * @date 2016-04-12
 	 */
-	public static void clickElementByScroll(String locatorexpression) {	
+	public void clickElementByScroll(String locatorexpression) {	
 		//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().scrollFindElement(locatorexpression);
+		WebElement element = driver.scrollFindElement(locatorexpression);
 		if(element == null){throw new RuntimeException("元素未找到!");}
 		element.click();
 	}
@@ -550,9 +555,9 @@ public class Element
 	 * @author baozhida
 	 * @date 2016-04-12
 	 */
-	public static void findElementandScroll(String locatorexpression,int offset) {	
+	public void findElementandScroll(String locatorexpression,int offset) {	
 		//ElementLocator locator = ElementLocator.create(locatorexpression);
-		WebElement element = getDriver().scrollFindElement(locatorexpression, offset);
+		WebElement element = driver.scrollFindElement(locatorexpression, offset);
 		if(element == null){throw new RuntimeException("元素未找到!");}
 	}
 

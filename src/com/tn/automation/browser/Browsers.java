@@ -5,40 +5,62 @@ import java.util.Map;
 
 public class Browsers {
 
-	private static String activeAlias = null;
-	private static WebBrowser activeBrowser;
-	private static Map<String, WebBrowser> browsers = new HashMap<String, WebBrowser>();
+	private String activeAlias = null;
+	private WebBrowser activeBrowser;
+	private Map<String, WebBrowser> browsers = new HashMap<String, WebBrowser>();
 
-	public static WebBrowser getDriver() {
+	public WebBrowser getDriver() {
 		return activeBrowser;
 	}
 
 
-    public static boolean isExist(String alias) {
+    public boolean isExist(String alias) {
 		return browsers.containsKey(alias);
 	}
 
-	public static WebBrowser initBrowser(String alias, BrowserType type) {
+	public WebBrowser initBrowser(String alias, String type) {
 		return initBrowser(alias, type, null, null);
 	}
 
 	/*
-	 *初始化浏览器
+	 *初始化浏览器BrowserType
 	 */
-    public static WebBrowser initBrowser(String alias, BrowserType type, String browserVersion, String remoteIP) {
+    public WebBrowser initBrowser(String alias, String type, String browserversion, String remoteIP) {
 		if (isExist(alias)) {
 			System.out.println("Browser with alias <" + alias + "> is already exist.");
 			remove(alias);
 		}
 
 		WebBrowser browser = null;
-
-		if (type == null) {
-			type = BrowserType.Chrome;
-		}
+		BrowserType browsertype;
+		
+		if (type.equalsIgnoreCase("firefox"))
+        {
+			browsertype=BrowserType.Firefox;
+        }
+        else if (type.equalsIgnoreCase("chrome"))
+        {
+        	browsertype=BrowserType.Chrome;
+        }
+        else if (type.equalsIgnoreCase("IE"))
+        {
+        	browsertype=BrowserType.IE;
+        }
+        else if (type.equalsIgnoreCase("Opera"))
+        {
+        	browsertype=BrowserType.Opera;
+        }
+        else if (type.equalsIgnoreCase("Safari"))
+        {
+        	browsertype=BrowserType.Safari;
+        }
+        else
+        {
+        	browsertype=BrowserType.Chrome;
+        }
 
 		
-		switch (type)
+		switch (browsertype)
 	    {
 	    	case IE:
 	            //browser = new InternetExplorer();
@@ -47,7 +69,7 @@ public class Browsers {
 	            //browser = new Firefox();
 	        	break;
 	        case Chrome:
-	            browser = new Chrome(browserVersion,remoteIP);
+	            browser = new Chrome(browserversion,remoteIP);
 	            break;
 	        case Opera:
 	            //browser = new Opera();
@@ -61,7 +83,7 @@ public class Browsers {
 		return browser;
 	}
 
-	public static void remove(String alias) {
+	public void remove(String alias) {
 		if (isExist(alias)) {
 			try {
 				browsers.remove(alias).quit();
@@ -75,13 +97,13 @@ public class Browsers {
 		}
 	}
 
-	private static void activate(String alias, WebBrowser browser) {
+	private void activate(String alias, WebBrowser browser) {
 		browsers.put(alias, browser);
 		activeAlias = alias;
 		activeBrowser = browser;
 	}
 
-	public static WebBrowser activate(String alias) {
+	public WebBrowser activate(String alias) {
 		if (isExist(alias)) {
 			activeAlias = alias;
 			activeBrowser = browsers.get(alias);

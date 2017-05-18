@@ -2,10 +2,6 @@ package com.tn.automation.testngcase;
 
 //import static org.testng.AssertJUnit.assertTrue;
 //import static org.testng.AssertJUnit.fail;
-import static com.tn.automation.browser.Browsers.initBrowser;
-import static com.tn.automation.browser.Browsers.getDriver;
-
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +13,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
@@ -28,6 +25,9 @@ import com.tn.automation.util.Path;
 import com.alibaba.fastjson.JSONObject;
 
 import com.tn.automation.browser.BrowserType;
+import com.tn.automation.browser.Browsers;
+import com.tn.automation.browser.Element;
+import com.tn.automation.browser.WebBrowser;
 
 public class RunWEB {
     
@@ -36,83 +36,22 @@ public class RunWEB {
 	private String remoteIP;
 	boolean isFail;
 	int initcount = 0;
-	static WebDriver driver;
-	
-	
-	static BrowserType BrowserType;
-	static String BrowserVersion;
-	static String RemoteIP;
-	
-	public BrowserType getBrowser() {
-		return BrowserType;
-	}
+	private WebBrowser driver;
+	private Browsers browser = new Browsers();
+	private CommonFunction cf;
+	private Element el;
 
-	public void setBrowser(BrowserType browserType) {
-		BrowserType = browserType;
-	}
-
-	public String getBrowserVersion() {
-		return BrowserVersion;
-	}
-
-	public void setBrowserVersion(String browserVersion) {
-		BrowserVersion = browserVersion;
-	}
-	
-	public String getRemoteIP() {
-		return RemoteIP;
-	}
-
-	public void setRemoteIP(String remoteIP) {
-		RemoteIP = remoteIP;
-	}
-	
     
-    public void initDriver() throws Exception {
-    	
-    	if (browsertype.equalsIgnoreCase("firefox"))
-        {
-    		setBrowser(BrowserType.Firefox);
-        }
-        else if (browsertype.equalsIgnoreCase("chrome"))
-        {
-        	setBrowser(BrowserType.Chrome);
-        }
-        else if (browsertype.equalsIgnoreCase("IE"))
-        {
-        	setBrowser(BrowserType.IE);
-        }
-        else if (browsertype.equalsIgnoreCase("Opera"))
-        {
-        	setBrowser(BrowserType.Opera);
-        }
-        else if (browsertype.equalsIgnoreCase("Safari"))
-        {
-        	setBrowser(BrowserType.Safari);
-        }
-        else
-        {
-        	setBrowser(BrowserType.Chrome);
-        }
-    	setBrowserVersion(browserversion);
-    	setRemoteIP(remoteIP);
-    	initBrowser("chrome"+browserversion, BrowserType, BrowserVersion, RemoteIP);
-    	
-    }
-
     @BeforeTest
     @Parameters({ "browsertype", "browserversion", "remoteIP" })  
-    public void initParameters(String browsertype, String browserversion, String remoteIP) {
-          this.browsertype = browsertype;
-          this.browserversion = browserversion;
-          this.remoteIP = remoteIP;
-      }
-    
-    @BeforeClass
-    public void setUp() throws Exception {
+    public void setUp(String browsertype, String browserversion, String remoteIP) throws Exception {
+    	this.browsertype = browsertype;
+    	this.browserversion = browserversion;
     	System.out.println("进入setUp方法");
-    	initDriver();
-    	getDriver().open("http://www.tuniu.com");
+        System.out.println(browserversion);
+        driver = browser.initBrowser("chrome"+browserversion, browsertype, browserversion, remoteIP);
+        cf = new CommonFunction(driver);
+        el = new Element(driver);
     	Thread.sleep(5000);
     }
     
@@ -122,29 +61,31 @@ public class RunWEB {
     }
 
     @Test
-    public void case_001检查首页css和js引用正常连接() throws Exception {
-    	System.out.println("start case_001");
-    	//getDriver().scrollToBottom();
+    public void case_001检查北京首页css_js引用连接() throws Exception {
+    	driver.open("http://www.baidu.com");
+    	driver.scrollToBottom();
+    	Thread.sleep(5000);
     	//检查js引用
-    	CaseResult result = CommonFunction.checkJsURLConnect();
+    	CaseResult result = cf.checkJsURLConnect();
     	Assert.assertTrue(result.getKey(),result.getMsg());
     	//检查css引用
-    	result = CommonFunction.checkCssURLConnect();
+    	result = cf.checkCssURLConnect();
     	Assert.assertTrue(result.getKey(),result.getMsg());
-    	
-    	//getDriver().takeScreenshot(browsertype, BrowserVersion);
+    	//el.getSizeX("xpath:://div[@id=\"lg\"]");
     	System.out.println("end case_001()");
     }
     
     
     @Test//(enabled = false)
-    public void case_002检查首页图片能正常连接() throws Exception {
-    	System.out.println("start case_002()");
-    	//getDriver().scrollToBottom();
-    	CaseResult result =CommonFunction.checkPicConnect();
+    public void case_002检查北京首页图片正常连接() throws Exception {
+    	driver.open("http://bj.tuniu.com");
+    	driver.scrollToBottom();
+    	CaseResult result =cf.checkPicConnect();
     	Assert.assertTrue(result.getKey(),result.getMsg());
     	System.out.println("end case_002()");
     }
+    
+
     
     
     @AfterMethod
@@ -155,7 +96,7 @@ public class RunWEB {
     @AfterClass
     public void tearDown() throws Exception {
     	System.out.println("进入tearDown方法");
-    	getDriver().quit();
+    	driver.quit();
     }
     
     public void failReWrite(String message) {

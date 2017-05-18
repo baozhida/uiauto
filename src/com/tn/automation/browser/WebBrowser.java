@@ -1,7 +1,6 @@
 package com.tn.automation.browser;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static com.tn.automation.browser.Browsers.activate;
 
 import com.tn.automation.util.ElementLocator;
 import java.awt.image.BufferedImage;
@@ -192,8 +191,8 @@ public abstract class WebBrowser {
 	 * @return 返回值为空
 	 * @throws Exception
 	 */
-	public static void browserActivate(String alias) {
-		WebBrowser browser = activate(alias);
+	public void browserActivate(String alias) {
+		WebBrowser browser = new Browsers().activate(alias);
 		if (browser == null) {
 			throw new RuntimeException("Browser with alias <" + alias + "> is not exist.");
 		}

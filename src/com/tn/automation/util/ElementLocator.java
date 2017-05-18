@@ -24,6 +24,14 @@ public abstract class ElementLocator {
 	public ElementLocator() {
 		parent = null;
 	}
+	
+	// private static class LazyHolder {
+		// private static final CommonFunction INSTANCE = new CommonFunction();
+		// }
+		// private CommonFunction(){}
+		// public static final CommonFunction getInstance() {
+		// return LazyHolder.INSTANCE;
+		// }
 
 	public static ElementLocator create(final String expr) {
 		String[] sType = expr.split("::");

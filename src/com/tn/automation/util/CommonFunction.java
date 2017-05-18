@@ -1,13 +1,13 @@
 package com.tn.automation.util;
 
-import static com.tn.automation.browser.Browsers.getDriver;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.WebElement;
-import org.apache.http.client.ClientProtocolException;
+
+import com.tn.automation.browser.WebBrowser;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -17,12 +17,26 @@ public class CommonFunction {
 
 	static CaseResult result = new CaseResult();
 
+	// private static class LazyHolder {
+	// private static final CommonFunction INSTANCE = new CommonFunction();
+	// }
+	// private CommonFunction(){}
+	// public static final CommonFunction getInstance() {
+	// return LazyHolder.INSTANCE;
+	// }
+	private WebBrowser driver;
+
+	public CommonFunction(WebBrowser driver) {
+		super();
+		this.driver = driver;
+	}
+
 	/**
-	 * 字符串替换 如 abcdefgh，使用a替换ef，将得到abcdagh
+	 * 字符串替换
 	 * 
 	 * @param poParam
 	 */
-	public static String replaceStr(String fromStr, String form, String to) {
+	public String replaceStr(String fromStr, String form, String to) {
 		String toStr = fromStr.replace(form, to);
 		return toStr;
 
@@ -31,14 +45,14 @@ public class CommonFunction {
 	/**
 	 * 检查页面引用的js文件能否正常请求
 	 * 
-	 * @param ArrayList
-	 *            url存放的位置
+	 *
+	 * 
 	 */
-	public static CaseResult checkJsURLConnect() {
+	public CaseResult checkJsURLConnect() {
 		String jsurl;
-		String msg = "校验错误：";
+		String msg = "校验有错误： \r\n";
 		CloseableHttpResponse response = null;
-		List<WebElement> elements = getDriver().findElements("xpath:://script[@src]");
+		List<WebElement> elements = driver.findElements("xpath:://script[@src]");
 		ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < elements.size(); i++) {
 			list.add(elements.get(i).getAttribute("src"));
@@ -60,8 +74,8 @@ public class CommonFunction {
 				/** 请求发送成功，并得到响应 **/
 				if (response.getStatusLine().getStatusCode() != 200) {
 					flag = false;
-					msg = msg + "第" + (i + 1) + " JS URL=" + jsurl + " 请求失败，返回码是"
-							+ response.getStatusLine().getStatusCode() + "; \r\n";
+					msg = msg + "第" + (i + 1) + " JS URL=" + jsurl + " 请求失败，返回码是 "
+							+ response.getStatusLine().getStatusCode() + " ; \r\n";
 				}
 			}
 		}
@@ -78,16 +92,16 @@ public class CommonFunction {
 	}
 
 	/**
-	 * 检查页面引用的js文件能否正常请求
+	 * 检查页面引用的css文件能否正常请求
 	 * 
-	 * @param ArrayList
-	 *            url存放的位置
+	 * 
+	 * 
 	 */
-	public static CaseResult checkCssURLConnect() {
+	public CaseResult checkCssURLConnect() {
 		String cssurl;
-		String msg = "校验错误：";
+		String msg = "校验有错误： \r\n";
 		CloseableHttpResponse response = null;
-		List<WebElement> elements = getDriver().findElements("xpath:://link[@href]");
+		List<WebElement> elements = driver.findElements("xpath:://link[@href]");
 		ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < elements.size(); i++) {
 			list.add(elements.get(i).getAttribute("href"));
@@ -109,8 +123,8 @@ public class CommonFunction {
 				/** 请求发送成功，并得到响应 **/
 				if (response.getStatusLine().getStatusCode() != 200) {
 					flag = false;
-					msg = msg + "第" + (i + 1) + " CSS URL=" + cssurl + " 请求失败，返回码是"
-							+ response.getStatusLine().getStatusCode() + "; \r\n";
+					msg = msg + "第" + (i + 1) + " CSS URL=" + cssurl + " 请求失败，返回码是 "
+							+ response.getStatusLine().getStatusCode() + " ; \r\n";
 				}
 			}
 		}
@@ -125,16 +139,14 @@ public class CommonFunction {
 	}
 
 	/**
-	 * 获取页面图片原址请求响应码 获取某页面所有图片的原址的请求响应消息码存储上下文中。前提需打开要验证此功能的页面
-	 * 配合通用方法生成CSV文件使用。内容格式形如：1,http://www.sdfsdfsdf,状态:200|2,http://www.
-	 * sdfsdfsdf,状态:404
+	 * 检查页面引用的image文件能否正常请求
 	 * 
-	 * @param poParam
+	 * 
 	 */
-	public static CaseResult checkPicConnect() {
-		String msg = "校验错误：";
+	public CaseResult checkPicConnect() {
+		String msg = "校验有错误： \r\n";
 		boolean flag = true;
-		List<WebElement> elements = getDriver().findElements("xpath:://img");// 获取所有img节点
+		List<WebElement> elements = driver.findElements("xpath:://img");// 获取所有img节点
 		StringBuffer sbURL = new StringBuffer();
 		String src;
 		int Count200 = 0;
@@ -148,7 +160,7 @@ public class CommonFunction {
 			for (int i = 0; i < elements.size(); i++) {
 				try {
 					src = elements.get(i).getAttribute("SRC").trim();
-					//System.out.println("第" + (i + 1) + "个图片的URL=" + src);
+					// System.out.println("第" + (i + 1) + "个图片的URL=" + src);
 					if (src == null) {
 						CountSrcnull = CountSrcnull + 1;
 					}
@@ -173,8 +185,8 @@ public class CommonFunction {
 				} else {
 					flag = false;
 					Counterror = Counterror + 1;
-					msg = msg + "第" + (i + 1) + " imgae URL=" + src + " 请求失败，返回码是"
-							+ response.getStatusLine().getStatusCode() + "; \r\n";
+					msg = msg + "第" + (i + 1) + " imgae URL=" + src + " 请求失败，返回码是 "
+							+ response.getStatusLine().getStatusCode() + " ; \r\n";
 				}
 
 			}
