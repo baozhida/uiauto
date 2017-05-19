@@ -29,7 +29,7 @@ import com.tn.automation.browser.Browsers;
 import com.tn.automation.browser.Element;
 import com.tn.automation.browser.WebBrowser;
 
-public class RunWEB {
+public class RunCaes {
     
 	private String browsertype;
 	private String browserversion;
