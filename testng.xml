@@ -1,19 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="WEB" parallel="tests" thread-count="1">
-<!-- browserversion 48.0.2564.109 50.0.2661.75 172.30.232.132 58.0.3029.81 192.168.99.100-->
-    <!--<test name="chrome48">
+<suite name="WEBUIAUTO" parallel="tests" thread-count="4">
+<!-- browserversion 48.0.2564.109 50.0.2661.75 172.30.232.132 58.0.3029.81 192.168.99.100  55.0.2883.75-->
+    <test name="chrome48">
         <parameter name="browsertype" value="chrome" />
         <parameter name="browserversion" value="48.0.2564.109" />
         <parameter name="remoteIP" value="192.168.99.100" />
         <classes>
-            <class name="com.xx.qa.automation.testngcase.RunWEB" />
+            <class name="com.tn.automation.testngcase.RunWEB" />
         </classes>
     </test>
-    -->
-	<test name="chrome58">
+
+ 	<test name="chrome58">
         <parameter name="browsertype" value="chrome" />
         <parameter name="browserversion" value="58.0.3029.81" />
+        <parameter name="remoteIP" value="192.168.99.100" />
+        <classes>
+            <class name="com.tn.automation.testngcase.RunWEB" />
+        </classes>
+    </test>
+
+    <test name="ff47">
+        <parameter name="browsertype" value="firefox" />
+        <parameter name="browserversion" value="47.0" />
+        <parameter name="remoteIP" value="192.168.99.100" />
+        <classes>
+            <class name="com.tn.automation.testngcase.RunWEB" />
+        </classes>
+    </test>
+
+	<test name="ff52">
+        <parameter name="browsertype" value="firefox" />
+        <parameter name="browserversion" value="52.0" />
         <parameter name="remoteIP" value="192.168.99.100" />
         <classes>
             <class name="com.tn.automation.testngcase.RunWEB" />

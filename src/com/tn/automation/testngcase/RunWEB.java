@@ -63,7 +63,6 @@ public class RunWEB {
     @Test
     public void case_001检查北京首页css_js引用连接() throws Exception {
     	driver.open("http://bj.tuniu.com");
-    	driver.scrollToBottom();
     	Thread.sleep(5000);
     	//检查js引用
     	CaseResult result = cf.checkJsURLConnect();

@@ -50,7 +50,7 @@
 	 <target name="testng" depends="compile">
 	    <testng  classpathref="compile.path"  outputDir="report" 
 			useDefaultListeners="false"   
-	        listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter" >
+	        listeners="org.uncommons.reportng.HTMLReporter,org.testng.reporters.FailedReporter" >
 	        <xmlfileset dir="${basedir}" includes="testng.xml"/>
 	        <jvmarg value="-Dfile.encoding=UTF-8" />
 	        <sysproperty key="org.uncommons.reportng.title" value="UIAutoTestReport" /> 

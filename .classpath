@@ -24,11 +24,13 @@
 	<classpathentry kind="lib" path="lib/json-smart-2.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/macacaclient-2.0.7.jar"/>
 	<classpathentry kind="lib" path="lib/reportng-1.1.4.jar"/>
-	<classpathentry kind="lib" path="lib/selenium-server-standalone-3.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.16.jar"/>
-	<classpathentry kind="lib" path="lib/testng-6.10.jar"/>
+	<classpathentry kind="lib" path="lib/testng-6.10.jar" sourcepath="lib/testng-6.10-sources.jar"/>
 	<classpathentry kind="lib" path="lib/velocity-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/velocity-dep-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/guice-3.0.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient-4.5.2.jar" sourcepath="lib/httpclient-4.5.2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/httpcore-4.4.4.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-server-standalone-3.3.1.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
